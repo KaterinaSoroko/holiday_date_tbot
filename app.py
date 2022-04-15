@@ -7,5 +7,7 @@ token = TOKEN
 
 bot = telebot.TeleBot(token)
 
-bot.send_message(ID_CHAT, mes.answer_message)
 
+date_today = mes.get_data()
+answer_message = mes.prepare_message(date_today)
+bot.send_message(ID_CHAT, answer_message)

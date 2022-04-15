@@ -1,22 +1,24 @@
 from datetime import date
-from bot.birthday_example import list_birthday
+from bot.birthday import list_birthday
+from bot.constans import month
 
 
-answer_message = ""
-date_today = date.today()
+def get_data():
+    today = date.today()
+    day_today = int(today.strftime("%d"))
+    month_today = int(today.strftime("%m"))
+    year_today = int(today.strftime("%y")) + 2000
+    return day_today, month_today, year_today
 
-for string in list_birthday:
-    delta_y = int(date_today.strftime("%y")) - int(string[2]) + 2000
-    delta_m = int(date_today.strftime("%m")) - int(string[1])
-    delta_d = int(date_today.strftime("%d")) - int(string[0])
-    if delta_m == 0 and delta_d == 0:
-        answer_message += f"Сегодня День Рождения у {string[4]}!\n"
-        if delta_y <= 25:
-            answer_message += f"""Поздравляем {string[3]} с {delta_y}-летием!
+
+def prepare_message(date_today):
+    answer_message = ""
+    for string in list_birthday:
+        if date_today[0] == string[0] and date_today[1] == string[1]:
+            answer_message += f"Сегодня День Рождения у {string[4]}!\n"
+            answer_message += f"""Поздравляем {string[3]} с {date_today[2] - string[2]}-летием!
 Желаем здоровья, счастья и много приятных интересностей!\n\n"""
-        else:
-            answer_message += f"""Поздравляем {string[3]} с Днем Рождения!
-Желаем здоровья, счастья и много любви!\n\n"""
 
-if answer_message == "":
-    answer_message = "Поздравляю всех с {}.{}!".format(date_today.strftime('%d'), date_today.strftime('%m'))
+    if answer_message == "":
+        answer_message = "Поздравляю всех с {} {}!".format(date_today[0], month[date_today[1]])
+    return answer_message
